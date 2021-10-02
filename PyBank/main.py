@@ -1,67 +1,70 @@
-#PyBank
-#Analyzing financial records
+# PyBank
+# Analyzing financial records
 
-#Import modules
+# Import modules
 import os
 import csv
 
-#set path for pile
+# set path for pile
 csvpath = os.path.join("Resources","budget_data.csv")
 
-#Declare variables
-# total_months=0
-total_revenue=0
-prev_revenue_change=0
-revenue_change_list=[]
-month_change_list=[]
-greatest_increase=0
-greatest_decrease=0
+# lists to organize data 
+months = []
+revenue = []
+revenue_change = []
 
-#open csv file
-with open(csvpath) as csvfile:
+# open csv file
+with open(csvpath,'r') as csvfile:
     csvreader = csv.reader(csvfile,delimiter=",")
-    csv_header = next(csvreader)
-    print("Financial Analysis")
-    print("-------------------")  
-    ## THIS IS THE BUG. IF I leave it as is I get the months, but the total goes away. Comment it out and I get total but 0 months. 
-    total_months=len(list(csvreader)) 
-    print("Total Months:" + str(total_months))
-    print("Total:" + str(total_revenue) )  
-    index=0
+    row = next(csvreader)
+
     for row in csvreader:
-       if (index==0):
-        #    total_months+=1
-           total_revenue = total_revenue + int(row[1])
-           prev_revenue_change = int(row[1])
-           month_change_list = month_change_list + [row[0]]
-           index+=1
-           continue
-      
+        months.append(row[0])
+        revenue.append(int(row[1]))
 
-#   The total number of months included in the dataset
-    
-   
-#   * Calculate the changes in "Profit/Losses" over the entire period, then find the average of those changes
-   
+# calculate  months
+total_months=len(months) 
 
-#   * The greatest increase in profits (date and amount) over the entire period
-    #for row in csvreader:
-        
+# set variables for revenue calculations
+total_revenue = 0
+month_count = 0
+current_month_rev = 0
+prev_month_rev = 0
+total_change = 0
 
-#   * The greatest decrease in profits (date and amount) over the entire period
+# loop through revenue and calculate variables
+for r in range(len(revenue)):
+    #total revenue
+    total_revenue += revenue[r]
+    # calculating change in revenue
+    current_month_rev = int(revenue[r])
+    total_change += current_month_rev
+    month_count += 1
+    if month_count == 1:
+        prev_month_rev = current_month_rev
+    else:
+        total_change = current_month_rev - prev_month_rev
+        revenue_change.append(total_change)
+        print(revenue_change)
+        prev_month_rev = current_month_rev
+# greatest increase and decrease in revenue change
+    #for x in range(total_change):
+        # print(greatest_increase)
+        # greatest_decrease = min(total_change)
+        # print(greatest_decrease)
+        # if revenue[x] == greatest_increase:
+        #     increase_month = months[x]
+        # elif revenue[x] == greatest_decrease:
+        #     decrease_month = months[x]
+#sum and avg change in revenue
+sum_changes = sum(revenue_change)
+avg_change = round(sum_changes/total_months, 2)
 
-
-# Specify the file to write to
-output_path = os.path.join("Analysis", "Pybank_analysis.csv")
-
-# Open the file using "write" mode. Specify the variable to hold the contents
-# with open(output_path, 'w') as csvfile:
-
-#     # Initialize csv.writer
-#     csvwriter = csv.writer(csvfile, delimiter=',')
-
-#     # Write the first row (column headers)
-#     csvwriter.writerow(['Financial Analysis'])
-
-#     # Write the second row
-#     csvwriter.writerow(['Total Months', 'Total', 'Average Change','Greatest Increase in Profits','Greatest Decrease in Profits'])      
+#print out deliverables
+print("Financial Analysis")
+print("-------------------")  
+print("Total months:" + str(total_months))
+print("Total:" + str(total_revenue))   
+print("Average Change:" + str(avg_change))  
+# print("Greatest Increase:" + str(increase_month) + " " + str(greatest_increase))
+# print("Greatest Decrease:" + str(decrease_month) + " " + str(greatest_decrease))
