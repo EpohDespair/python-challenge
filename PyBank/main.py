@@ -45,7 +45,6 @@ for r in range(len(revenue)):
     else:
         total_change = current_month_rev - prev_month_rev
         revenue_change.append(total_change)
-        print(revenue_change)
         prev_month_rev = current_month_rev
 # greatest increase and decrease in revenue change
     #for x in range(total_change):
@@ -68,3 +67,13 @@ print("Total:" + str(total_revenue))
 print("Average Change:" + str(avg_change))  
 # print("Greatest Increase:" + str(increase_month) + " " + str(greatest_increase))
 # print("Greatest Decrease:" + str(decrease_month) + " " + str(greatest_decrease))
+# output file
+output = os.path.join("Analysis", "PyBank_analysis.txt")
+
+# Open the file using "write" mode. Specify the variable to hold the contents
+with open(output, 'w') as textfile:
+    output.write("Financial Analysis")
+    output.write("----------------------")
+    output.write("Total months:", str(total_months))
+    output.write("Total:", str(total_revenue))
+    print("Average Change:", str(avg_change))
